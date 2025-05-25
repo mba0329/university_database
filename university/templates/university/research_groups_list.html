@@ -1,0 +1,29 @@
+{% extends "university/base.html" %}
+{% block title %}Research Groups | University Database{% endblock %}
+{% block content %}
+<h1>Research Groups</h1>
+<div style="display:flex; flex-wrap:wrap; gap:2em; margin-top:2em;">
+  {% for group in groups %}
+    <div style="background:#f8fafc; border-radius:8px; box-shadow:0 2px 8px #ddd; width:330px; padding:1.5em;">
+      <h2 style="margin-top:0;">
+        <a href="{% url 'researchgroup_detail' group.id %}" style="color:#005baa; text-decoration:none;">
+          {{ group.name }}
+        </a>
+      </h2>
+      <div style="font-size:0.97em; min-height:3em;">{{ group.description|truncatewords:25 }}</div>
+      <div style="margin-top:1em;">
+        <strong>Lead Professor:</strong>
+        {% if group.lead_professor %}
+          <a href="{% url 'professor_detail' group.lead_professor.id %}" style="color:#3b8fc1;">
+            {{ group.lead_professor }}
+          </a>
+        {% else %}
+          <span style="color:#888;">None</span>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <p>No research groups found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

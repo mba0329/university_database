@@ -1,0 +1,22 @@
+{% extends "university/base.html" %}
+{% block title %}Courses | University Database{% endblock %}
+{% block content %}
+<h1>Courses</h1>
+<div style="display:flex; flex-wrap:wrap; gap:2em; margin-top:2em;">
+  {% for course in courses %}
+    <div style="background:#f8fafc; border-radius:8px; box-shadow:0 2px 8px #ddd; width:330px; padding:1.5em;">
+      <h2 style="margin-top:0;">
+        <a href="{% url 'course_detail' course.id %}" style="color:#005baa; text-decoration:none;">{{ course.name }}</a>
+      </h2>
+      <div style="margin-bottom:0.7em; color:#555;">Code: {{ course.code }}</div>
+      <div style="font-size:0.97em; min-height:3em;">{{ course.description|truncatewords:25 }}</div>
+      <div style="margin-top:1em;">
+        <strong>Credits:</strong> {{ course.credits }}<br>
+        <strong>Level:</strong> {{ course.level }}
+      </div>
+    </div>
+  {% empty %}
+    <p>No courses available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

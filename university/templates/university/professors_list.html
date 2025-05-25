@@ -1,0 +1,28 @@
+{% extends "university/base.html" %}
+{% block title %}Professors | University Database{% endblock %}
+{% block content %}
+<h1>Professors</h1>
+<div style="display:flex; flex-wrap:wrap; gap:2em; margin-top:2em;">
+  {% for professor in professors %}
+    <div style="background:#f8fafc; border-radius:8px; box-shadow:0 2px 8px #ddd; width:330px; padding:1.5em;">
+      <h2 style="margin-top:0;">
+        <a href="{% url 'professor_detail' professor.id %}" style="color:#005baa; text-decoration:none;">
+          {{ professor.title }} {{ professor.name }}
+        </a>
+      </h2>
+      <div style="font-size:0.97em; color:#555;">{{ professor.position }}</div>
+      {% if professor.image_url %}
+        <img src="{{ professor.image_url }}" alt="{{ professor }}" style="max-width:100%; border-radius:6px; margin:1em 0;">
+      {% endif %}
+      <div style="margin-top:1em;">
+        <strong>Research Group:</strong>
+        <a href="{% url 'researchgroup_detail' professor.research_group.id %}" style="color:#3b8fc1;">
+          {{ professor.research_group.name }}
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <p>No professors found.</p>
+  {% endfor %}
+</div>
+{% endblock %}
