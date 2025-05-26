@@ -22,6 +22,7 @@ class ResearchGroupAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'get_lead_professor')
     search_fields = ('name',)
     inlines = [PhDStudentInline]
+    fields = ('name', 'description', 'lead_professor')  # Add this line to show the lead_professor field in the admin form
 
     def get_lead_professor(self, obj):
         return getattr(obj.lead_professor, 'name', None)

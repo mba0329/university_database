@@ -2,21 +2,45 @@
 {% block title %}Courses | University Database{% endblock %}
 {% block content %}
 <h1>Courses</h1>
-<div style="display:flex; flex-wrap:wrap; gap:2em; margin-top:2em;">
-  {% for course in courses %}
-    <div style="background:#f8fafc; border-radius:8px; box-shadow:0 2px 8px #ddd; width:330px; padding:1.5em;">
-      <h2 style="margin-top:0;">
-        <a href="{% url 'course_detail' course.id %}" style="color:#005baa; text-decoration:none;">{{ course.name }}</a>
-      </h2>
-      <div style="margin-bottom:0.7em; color:#555;">Code: {{ course.code }}</div>
-      <div style="font-size:0.97em; min-height:3em;">{{ course.description|truncatewords:25 }}</div>
-      <div style="margin-top:1em;">
-        <strong>Credits:</strong> {{ course.credits }}<br>
-        <strong>Level:</strong> {{ course.level }}
-      </div>
-    </div>
-  {% empty %}
-    <p>No courses available.</p>
-  {% endfor %}
+<div>
+  <a href="?view=list">List View</a> | <a href="?view=block">Block View</a>
 </div>
+{% if view_mode == "list" %}
+  <ul>
+    {% for course in courses %}
+      <li>
+        <a href="{% url 'course_detail' course.id %}">
+          {{ course.name }} ({{ course.code }})
+        </a>
+        — {{ course.level }}
+        {% if course.start_date %} | Start: {{ course.start_date }}{% endif %}
+        {% if course.end_date %} | End: {{ course.end_date }}{% endif %}
+      </li>
+    {% empty %}
+      <li>No courses found.</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div style="display:flex; flex-wrap:wrap; gap:2em; margin-top:2em;">
+    {% for course in courses %}
+      <div style="background:#f8fafc; border-radius:8px; box-shadow:0 2px 8px #ddd; width:330px; padding:1.5em;">
+        <h2 style="margin-top:0;">
+          <a href="{% url 'course_detail' course.id %}" style="color:#005baa; text-decoration:none;">
+            {{ course.name }} ({{ course.code }})
+          </a>
+        </h2>
+        <div style="font-size:0.97em; color:#555;">Level: {{ course.level }}</div>
+        {% if course.image_url %}
+          <img src="{{ course.image_url }}" alt="{{ course }}" style="max-width:100%; border-radius:6px; margin:1em 0;">
+        {% endif %}
+        <div style="margin-top:1em;">
+          {% if course.start_date %}<strong>Start:</strong> {{ course.start_date }}<br>{% endif %}
+          {% if course.end_date %}<strong>End:</strong> {{ course.end_date }}<br>{% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <p>No courses found.</p>
+    {% endfor %}
+  </div>
+{% endif %}
 {% endblock %}

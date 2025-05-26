@@ -3,6 +3,14 @@ from django.db import models
 class ResearchGroup(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    lead_professor = models.OneToOneField(
+        'Professor',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='leads_research_group'
+    )
+    # The related_name should be different from what you use in Professor
 
     def __str__(self):
         return self.name
@@ -12,7 +20,10 @@ class Professor(models.Model):
     name = models.CharField(max_length=255)
     position = models.CharField(max_length=255)
     research_group = models.OneToOneField(
-        ResearchGroup, related_name='lead_professor', on_delete=models.CASCADE
+        ResearchGroup, related_name='main_professor',  # update related_name to avoid clash
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
     bio = models.TextField(blank=True)
     image_url = models.URLField(blank=True)
@@ -37,7 +48,7 @@ class Course(models.Model):
         return self.name
 
 class PhDStudent(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, blank=True)  # <-- add blank=True here
     name = models.CharField(max_length=255)
     research_group = models.ForeignKey(ResearchGroup, on_delete=models.CASCADE, related_name='phd_students')
     supervisor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='phd_students')
@@ -49,7 +60,7 @@ class PhDStudent(models.Model):
         verbose_name_plural = "PhD students"
 
     def __str__(self):
-        return f"{self.title} {self.name}"
+        return f"{self.title} {self.name}".strip()
 
 class ProfessorCourse(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)

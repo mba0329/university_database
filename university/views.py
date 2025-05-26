@@ -6,20 +6,38 @@ def home(request):
 
 # List Views
 def professor_list(request):
+    view_mode = request.GET.get('view', 'block')
     professors = Professor.objects.all()
-    return render(request, 'university/professors_list.html', {'professors': professors})
+    return render(request, 'university/professors_list.html', {
+        'professors': professors,
+        'view_mode': view_mode,
+    })
 
 def course_list(request):
+    view_mode = request.GET.get('view', 'block')
     courses = Course.objects.all()
-    return render(request, 'university/courses_list.html', {'courses': courses})
+    return render(request, 'university/courses_list.html', {
+        'courses': courses,
+        'view_mode': view_mode,
+    })
 
 def phdstudent_list(request):
+    view_mode = request.GET.get('view', 'block')
     students = PhDStudent.objects.all()
-    return render(request, 'university/phd_students_list.html', {'students': students})
+    return render(request, 'university/phd_students_list.html', {
+        'students': students,
+        'view_mode': view_mode,
+    })
 
 def researchgroup_list(request):
+    view_mode = request.GET.get('view', 'block')
     groups = ResearchGroup.objects.all()
-    return render(request, 'university/research_groups_list.html', {'groups': groups})
+    return render(request, 'university/research_groups_list.html', {
+        'groups': groups,
+        'view_mode': view_mode,
+    })
+
+# Detail Views remain unchanged...
 
 # Detail Views
 def professor_detail(request, pk):
